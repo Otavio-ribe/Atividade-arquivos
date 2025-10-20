@@ -1,0 +1,68 @@
+while True:
+    nome = input("Nome do aluno: ")
+    n1 = float(input("Nota 1: "))
+    n2 = float(input("Nota 2: "))
+    n3 = float(input("Nota 3: "))
+
+    # salva no arquivo
+    with open("notas.txt", "a") as arquivo:
+        arquivo.write(f"{nome},{n1},{n2},{n3}\n")
+
+    continuar = input("Deseja cadastrar outro aluno? (S/N): ").upper()
+    if continuar == "N":
+        break
+
+print("Notas salvas em notas.txt!")
+print("----------------------------")
+
+arquivo = open("notas.txt", "r")
+linhas = arquivo.readlines()
+arquivo.close()
+
+for linha in linhas:
+    dados = linha.strip().split(",")
+    nome = dados[0]
+    n1 = float(dados[1])
+    n2 = float(dados[2])
+    n3 = float(dados[3])
+    media = (n1 + n2 + n3) / 3
+
+    if media >= 7:
+        with open("aprovados.txt", "a") as a:
+            a.write(f"{nome},{media:.2f},Aprovado\n")
+    elif media >= 5:
+        with open("exame.txt", "a") as a:
+            a.write(f"{nome},{media:.2f},Exame\n")
+    else:
+        with open("reprovados.txt", "a") as a:
+            a.write(f"{nome},{media:.2f},Reprovado\n")
+
+print("Médias calculadas e arquivos gerados!")
+print("----------------------------")
+try:
+    arquivo = open("exame.txt", "r")
+    linhas = arquivo.readlines()
+    arquivo.close()
+
+    if len(linhas) == 0:
+        print("Não há alunos em exame.")
+    else:
+        for linha in linhas:
+            dados = linha.strip().split(",")
+            nome = dados[0]
+            media_antiga = float(dados[1])
+
+            nota_exame = float(input(f"Nota do exame de {nome}: "))
+            nova_media = (media_antiga + nota_exame) / 2
+
+            if nova_media >= 5:
+                with open("aprovados.txt", "a") as a:
+                    a.write(f"{nome},{nova_media:.2f},Aprovado após exame\n")
+            else:
+                with open("reprovados.txt", "a") as a:
+                    a.write(f"{nome},{nova_media:.2f},Reprovado após exame\n")
+
+        print("Processo de exame finalizado!")
+
+except FileNotFoundError:
+    print("O arquivo exame.txt não existe ainda.")
