@@ -4,14 +4,12 @@ while True:
     n2 = float(input("Nota 2: "))
     n3 = float(input("Nota 3: "))
 
-    # salva no arquivo
     with open("notas.txt", "a") as arquivo:
         arquivo.write(f"{nome},{n1},{n2},{n3}\n")
 
     continuar = input("Deseja cadastrar outro aluno? (S/N): ").upper()
     if continuar == "N":
         break
-
 print("Notas salvas em notas.txt!")
 print("----------------------------")
 
